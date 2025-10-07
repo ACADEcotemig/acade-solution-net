@@ -1,0 +1,6 @@
+@AcadeAppApi_HostAddress = http://localhost:5206
+
+GET {{AcadeAppApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

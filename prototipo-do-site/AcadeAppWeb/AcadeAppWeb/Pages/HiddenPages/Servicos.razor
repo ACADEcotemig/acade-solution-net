@@ -1,0 +1,117 @@
+﻿@page "/servicos"
+@using AcadeAppWeb.Models
+@inject HttpClient Http
+
+<h3>Serviços</h3>
+
+@if (servicos == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Tipo de Lixo</th>
+                <th>Qtd Lixo</th>
+                <th>Qtd Máxima</th>
+                <th>Tempo</th>
+                <th>Disponibilidade</th>
+                <th>Data</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var s in servicos)
+            {
+                <tr>
+                    <td>@s.TipoLixo</td>
+                    <td>@s.QtdLixo</td>
+                    <td>@s.QtdMaxima</td>
+                    <td>@s.Tempo</td>
+                    <td>@s.Disponibilidade</td>
+                    <td>@s.DataColeta.ToShortDateString()</td>
+                    <td>
+                        <button class="btn btn-sm btn-warning" @onclick="() => EditServico(s)">Editar</button>
+                        <button class="btn btn-sm btn-danger" @onclick="() => DeleteServico(s.Id)">Excluir</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<hr />
+<h4>@(editingServico != null ? "Editar Serviço" : "Adicionar Serviço")</h4>
+
+<EditForm Model="servicoForm" OnValidSubmit="SaveServico">
+    <InputText @bind-Value="servicoForm.TipoLixo" placeholder="Tipo de Lixo" class="form-control" />
+    <InputNumber @bind-Value="servicoForm.QtdLixo" placeholder="Quantidade de Lixo" class="form-control" />
+    <InputNumber @bind-Value="servicoForm.QtdMaxima" placeholder="Quantidade Máxima" class="form-control" />
+    <InputNumber @bind-Value="servicoForm.Tempo" placeholder="Tempo" class="form-control" />
+    <InputText @bind-Value="servicoForm.Disponibilidade" placeholder="Disponibilidade" class="form-control" />
+    <InputDate @bind-Value="servicoForm.DataColeta" class="form-control" />
+
+    <button type="submit" class="btn btn-primary mt-2">@((editingServico != null) ? "Atualizar" : "Adicionar")</button>
+    <button type="button" class="btn btn-secondary mt-2" @onclick="CancelEdit">Cancelar</button>
+</EditForm>
+
+@code {
+    private List<Servico>? servicos;
+    private Servico servicoForm = new();
+    private Servico? editingServico;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadServicos();
+    }
+
+    private async Task LoadServicos()
+    {
+        servicos = await Http.GetFromJsonAsync<List<Servico>>("http://localhost:5206/api/servicos");
+    }
+
+    private void EditServico(Servico s)
+    {
+        editingServico = s;
+        servicoForm = new Servico
+        {
+            Id = s.Id,
+            TipoLixo = s.TipoLixo,
+            QtdLixo = s.QtdLixo,
+            QtdMaxima = s.QtdMaxima,
+            Tempo = s.Tempo,
+            Disponibilidade = s.Disponibilidade,
+            DataColeta = s.DataColeta
+        };
+    }
+
+    private void CancelEdit()
+    {
+        editingServico = null;
+        servicoForm = new Servico();
+    }
+
+    private async Task SaveServico()
+    {
+        if (editingServico == null)
+        {
+            await Http.PostAsJsonAsync("http://localhost:5206/api/servicos", servicoForm);
+        }
+        else
+        {
+            await Http.PutAsJsonAsync($"http://localhost:5206/api/servicos/{servicoForm.Id}", servicoForm);
+            editingServico = null;
+        }
+
+        servicoForm = new Servico();
+        await LoadServicos();
+    }
+
+    private async Task DeleteServico(int id)
+    {
+        await Http.DeleteAsync($"http://localhost:5206/api/servicos/{id}");
+        await LoadServicos();
+    }
+}

@@ -1,0 +1,100 @@
+﻿@page "/agendar"
+@using AcadeAppWeb.Models
+@inject HttpClient Http
+
+<section class="coleta-container">
+    <div class="mapa">
+        <img src="Imagens/mapa.png" alt="Mapa com localização" />
+    </div>
+
+    <div class="formulario-coleta">
+        <form @onsubmit="RegisterLocation">
+            <label for="email">E-mail:</label>
+            <input type="text" id="email" @bind="Email" placeholder="Digite seu e-mail" />
+
+            <label for="senha">Senha:</label>
+            <input type="password" id="senha" @bind="Senha" placeholder="Digite sua senha" />
+
+            <label for="localizacao">Localização:</label>
+            <input type="text" id="localizacao" @bind="Localizacao" placeholder="Digite sua localizacao" />
+
+            <button type="submit" class="botao-link">Registrar localização</button>
+        </form>
+
+        @if (!string.IsNullOrEmpty(Mensagem))
+        {
+            <p style="margin-top:15px; font-weight:bold; color:@MensagemCor;">@Mensagem</p>
+        }
+
+        <label for="infoAdicional">Informações adicionais:</label>
+        <input type="text" id="infoAdicional" placeholder="Detalhes extras" />
+
+        <div class="coleta-especial">
+            <label>
+                <input type="checkbox" id="especial" />
+                <span>Coleta especial</span>
+            </label>
+        </div>
+    </div>
+</section>
+
+<section class="avaliacao-coleta">
+    <label class="titulo-avaliacao">Avaliar coleta:</label>
+    <div class="estrelas">
+        <input type="radio" id="estrela5" name="estrela" value="5"><label for="estrela5">&#9733;</label>
+        <input type="radio" id="estrela4" name="estrela" value="4"><label for="estrela4">&#9733;</label>
+        <input type="radio" id="estrela3" name="estrela" value="3"><label for="estrela3">&#9733;</label>
+        <input type="radio" id="estrela2" name="estrela" value="2"><label for="estrela2">&#9733;</label>
+        <input type="radio" id="estrela1" name="estrela" value="1"><label for="estrela1">&#9733;</label>
+    </div>
+    <textarea placeholder="Deixe seu comentário..." class="comentario"></textarea>
+</section>
+
+<section class="mapa-enderecos">
+    <img src="Imagens/bairros-enderecos.png" alt="Endereços por região" />
+</section>
+
+@code {
+    private string Email;
+    private string Senha;
+    private string Localizacao;
+    private string Mensagem;
+    private string MensagemCor = "red";
+
+    private async Task RegisterLocation()
+    {
+        try
+        {
+            var usuarios = await Http.GetFromJsonAsync<List<Usuario>>("http://localhost:5206/api/usuarios");
+
+            if (usuarios != null)
+            {
+                var usuario = usuarios.FirstOrDefault(u => u.Email == Email && u.Senha == Senha);
+
+                if (usuario != null)
+                {
+                    usuario.Localizacao = Localizacao;
+                    await Http.PutAsJsonAsync($"http://localhost:5206/api/usuarios/{usuario.Id}", usuario);
+
+                    Mensagem = "✅ Localização registrada com sucesso!";
+                    MensagemCor = "green";
+                }
+                else
+                {
+                    Mensagem = "❌ Usuário ou senha incorretos.";
+                    MensagemCor = "red";
+                }
+            }
+            else
+            {
+                Mensagem = "❌ Não foi possível carregar usuários.";
+                MensagemCor = "red";
+            }
+        }
+        catch
+        {
+            Mensagem = "❌ Erro ao comunicar com o servidor.";
+            MensagemCor = "red";
+        }
+    }
+}

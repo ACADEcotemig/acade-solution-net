@@ -1,0 +1,27 @@
+﻿@page "/login"
+
+<section class="login">
+  <img src="Imagens/cadastro.png" alt="Cadastro / Login" class="header-img" />
+
+  <div class="form-container">
+    <label for="email">E-mail</label>
+    <input type="text" id="email" />
+
+    <label for="senha">Senha</label>
+    <input type="password" id="senha" />
+  </div>
+
+  <div class="button-box">
+    <a href="/cadastro" class="botao-link">Cadastrar</a>
+
+        <a href="/forgot-password" class="mt-2 d-block" style="color: white;">Esqueci minha senha</a>
+  </div>
+
+  <div class="google-login">
+    <img src="Imagens/google.png" alt="Fazer login com o Google" />
+  </div>
+</section>
+
+@code {
+    [Inject] NavigationManager Nav { get; set; } = default!;
+}

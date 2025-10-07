@@ -1,0 +1,23 @@
+﻿<nav class="navbar">
+    <NavLink href="/" Match="NavLinkMatch.All">Início</NavLink>
+    <NavLink href="/agendar">Agendar</NavLink>
+    <NavLink href="/login">Login</NavLink>
+    <NavLink href="/cadastro">Cadastro</NavLink>
+    <NavLink href="/educacao">Dicas</NavLink>
+    <button class="botao-link" @onclick="OnToggleThemeClick">
+        @(IsLight ? "☀️" : "🌙")
+    </button>
+
+</nav>
+
+@code {
+    [Parameter] public bool IsLight { get; set; }
+    [Parameter] public EventCallback OnToggleTheme { get; set; }
+
+    private async Task OnToggleThemeClick()
+    {
+        if (OnToggleTheme.HasDelegate)
+            await OnToggleTheme.InvokeAsync();
+    }
+}
+
