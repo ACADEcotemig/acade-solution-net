@@ -1,0 +1,93 @@
+﻿@page "/cadastro"
+@using AcadeAppWeb.Models
+@inject HttpClient Http
+
+<section class="formulario-cadastro">
+    <label for="email">E-mail:</label>
+    <input @bind="UserEmail" type="text" id="email" placeholder="Digite seu e-mail" class="form-control">
+
+    <label for="usuario">Nome de usuário:</label>
+    <input @bind="UserName" type="text" id="usuario" placeholder="Digite seu nome de usuário" class="form-control">
+
+    <label for="senha">Senha:</label>
+    <input @bind="UserPassword" type="password" id="senha" placeholder="Digite sua senha" class="form-control">
+
+    <label for="repetir-senha">Repetir a senha:</label>
+    <input @bind="UserPasswordRepeat" type="password" id="repetir-senha" placeholder="Repita sua senha" class="form-control">
+
+    <div class="notificacao-container">
+        <input @bind="WantsNotifications" type="checkbox" id="notificar">
+        <label for="notificar">Receber notificações de avisos e notícias?</label>
+    </div>
+
+    <button class="botao-link btn btn-primary mt-2" @onclick="CadastrarUsuario">Cadastrar</button>
+
+    @if (!string.IsNullOrEmpty(Message))
+    {
+        <p>@Message</p>
+    }
+</section>
+
+@code {
+    private string UserEmail = string.Empty;
+    private string UserName = string.Empty;
+    private string UserPassword = string.Empty;
+    private string UserPasswordRepeat = string.Empty;
+    private bool WantsNotifications = false;
+    private string Message = string.Empty;
+
+    private async Task CadastrarUsuario()
+    {
+        // Simple validation
+        if (string.IsNullOrWhiteSpace(UserEmail) ||
+            string.IsNullOrWhiteSpace(UserName) ||
+            string.IsNullOrWhiteSpace(UserPassword))
+        {
+            Message = "Todos os campos são obrigatórios!";
+            return;
+        }
+
+        if (UserPassword != UserPasswordRepeat)
+        {
+            Message = "As senhas não coincidem!";
+            return;
+        }
+
+        // Create the user object
+        var newUser = new Usuario
+        {
+            Nome = UserName,
+            Email = UserEmail,
+            Senha = UserPassword,
+            Telefone = "", // optional
+            HistoricoAtv = "",
+            RelatorioImpacto = "",
+            InterfacePref = "",
+            IdiomaPref = "",
+            Localizacao = "",
+            PontosColeta = ""
+        };
+
+        try
+        {
+            // Send to API
+            var response = await Http.PostAsJsonAsync("http://localhost:5206/api/usuarios", newUser);
+
+            if (response.IsSuccessStatusCode)
+            {
+                Message = "Usuário cadastrado com sucesso!";
+                // Clear form
+                UserEmail = UserName = UserPassword = UserPasswordRepeat = string.Empty;
+                WantsNotifications = false;
+            }
+            else
+            {
+                Message = "Erro ao cadastrar usuário.";
+            }
+        }
+        catch (Exception ex)
+        {
+            Message = $"Erro: {ex.Message}";
+        }
+    }
+}

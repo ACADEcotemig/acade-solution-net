@@ -1,0 +1,38 @@
+﻿@inherits LayoutComponentBase
+@inject IJSRuntime JS
+
+<div>
+    <NavMenu IsLight="@IsLight" OnToggleTheme="ToggleTheme" />
+    <main>
+        @Body
+    </main>
+    <footer class="rodape">
+        <p>© 2025 ACADE - Todos os direitos reservados</p>
+        <p><a href="mailto:contato@acade.com">contato@acade.com</a></p>
+    </footer>
+</div>
+
+@code {
+    private bool IsLight = false;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+            await UpdateRootClass();
+    }
+
+    private async Task UpdateRootClass()
+    {
+        if (IsLight)
+            await JS.InvokeVoidAsync("document.documentElement.classList.add", "light");
+        else
+            await JS.InvokeVoidAsync("document.documentElement.classList.remove", "light");
+    }
+
+    public async Task ToggleTheme()
+    {
+        IsLight = !IsLight;
+        await UpdateRootClass();
+        StateHasChanged();
+    }
+}

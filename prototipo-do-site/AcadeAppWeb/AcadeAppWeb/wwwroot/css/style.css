@@ -1,0 +1,414 @@
+/* ===========================
+   Global Variables
+=========================== */
+:root {
+    --bg-color: #2B2A2A;
+    --card-bg: #1f1f1f;
+    --accent: #00b4aa;
+    --accent-dark: #009288;
+    --text-color: #ffffff;
+    --muted: #bbbbbb;
+    --font-main: 'Poppins', Arial, sans-serif;
+    --radius: 12px;
+    --transition: 0.3s ease;
+}
+
+/* Light theme overrides */
+    :root.light {
+        --bg-color: #efefef;
+        --card-bg: #ffffff;
+        --accent: #00796b;
+        --accent-dark: #005a4f;
+        --text-color: #222222;
+        --muted: #666666;
+    }
+
+/* ===========================
+   Reset & Base
+=========================== */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: var(--font-main);
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-size: 18px;
+    line-height: 1.6;
+}
+
+/* ===========================
+   Navbar
+=========================== */
+.navbar {
+    background-color: var(--card-bg);
+    padding: 14px 20px;
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.navbar a {
+    color: var(--text-color);
+    text-decoration: none;
+    font-weight: bold;
+    transition: color var(--transition);
+}
+
+.navbar a:hover {
+    color: var(--accent);
+}
+
+/* ===========================
+   Banner
+=========================== */
+.banner img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    display: block;
+}
+
+/* ===========================
+   Sections
+=========================== */
+section {
+    padding: 40px 20px;
+    text-align: center;
+    animation: fadeIn 0.8s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ===========================
+   Icons
+=========================== */
+.icons {
+    display: flex;
+    justify-content: center;
+    gap: 60px;
+    margin-bottom: 60px;
+    flex-wrap: wrap;
+}
+
+.icons div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 200px;
+}
+
+.icons img {
+    width: 70px;
+    margin-bottom: 15px;
+}
+
+/* ===========================
+   Lixeiras
+=========================== */
+#meio {
+    text-align: center;
+    font-size: 28px;
+    margin: 40px 0 30px;
+}
+
+.lixeiras {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    padding: 40px;
+    flex-wrap: wrap;
+}
+
+.lixeira img {
+    width: 180px;
+    border-radius: var(--radius);
+    transition: transform var(--transition);
+}
+
+.lixeira img:hover {
+    transform: scale(1.1);
+    cursor: pointer;
+}
+
+/* ===========================
+   Buttons
+=========================== */
+.botao-link,
+.button-box button,
+.btlo {
+    display: inline-block;
+    padding: 12px 24px;
+    background-color: var(--accent);
+    color: #fff;
+    border: none;
+    text-decoration: none;
+    font-size: 18px;
+    border-radius: var(--radius);
+    transition: background-color var(--transition), transform var(--transition);
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+.botao-link:hover,
+.button-box button:hover,
+.btlo:hover {
+    background-color: var(--accent-dark);
+    transform: translateY(-2px);
+}
+
+/* ===========================
+   Forms
+=========================== */
+input[type="text"],
+input[type="password"],
+textarea {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 8px;
+    border: 2px solid transparent;
+    background-color: #444;
+    color: #fff;
+    margin-bottom: 15px;
+    transition: border var(--transition), background-color var(--transition);
+}
+
+input:focus,
+textarea:focus {
+    border: 2px solid var(--accent);
+    background-color: #333;
+    outline: none;
+}
+
+/* Coleta form */
+.coleta-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 40px;
+    align-items: flex-start;
+    margin: 40px 20px;
+}
+
+.mapa img {
+    width: 400px;
+    max-width: 100%;
+    border-radius: 20px;
+}
+
+.formulario-coleta {
+    width: 400px;
+    max-width: 100%;
+    padding: 20px;
+    background-color: var(--card-bg);
+    border-radius: var(--radius);
+    text-align: left;
+}
+
+.formulario-coleta label {
+    display: block;
+    margin-top: 20px;
+    margin-bottom: 8px;
+    color: var(--accent);
+    font-weight: bold;
+}
+
+/* Coleta especial */
+.coleta-especial {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-top: 10px;
+}
+
+.coleta-especial input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    accent-color: var(--accent);
+}
+
+.coleta-especial span {
+    color: var(--accent);
+    font-weight: bold;
+    font-size: 18px;
+}
+
+/* Avaliação */
+.avaliacao-coleta {
+    margin: 60px auto;
+    max-width: 500px;
+    text-align: left;
+    padding: 20px;
+    background-color: var(--card-bg);
+    border-radius: var(--radius);
+}
+
+.titulo-avaliacao {
+    font-size: 20px;
+    font-weight: bold;
+    color: var(--accent);
+    margin-bottom: 10px;
+}
+
+.estrelas {
+    display: flex;
+    flex-direction: row-reverse;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.estrelas input {
+    display: none;
+}
+
+.estrelas label {
+    font-size: 30px;
+    color: #444;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.estrelas input:checked ~ label,
+.estrelas label:hover,
+.estrelas label:hover ~ label {
+    color: #ffc107;
+}
+
+.comentario {
+    resize: vertical;
+    height: 100px;
+}
+
+/* Login form */
+.login {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.form-container {
+    background-color: #3a3a3a;
+    padding: 30px;
+    border-radius: var(--radius);
+    width: 300px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+    margin-bottom: 20px;
+    color: var(--accent)
+}
+
+img.header-img {
+    width: 100%;
+    max-width: 300px;
+    border-radius: var(--radius);
+    margin-bottom: 20px;
+}
+
+.button-box {
+    background-color: #3a3a3a;
+    border-radius: var(--radius);
+    padding: 15px;
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.google-login img {
+    width: 300px;
+    max-width: 100%;
+    border-radius: 40px;
+    cursor: pointer;
+    transition: transform var(--transition);
+}
+
+.google-login img:hover {
+    transform: scale(1.02);
+}
+
+/* Cadastro form */
+.formulario-cadastro {
+    max-width: 400px;
+    margin: 60px auto;
+    padding: 20px;
+    background-color: var(--card-bg);
+    border-radius: var(--radius);
+}
+
+.formulario-cadastro label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--accent);
+    font-weight: bold;
+}
+
+.notificacao-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background-color: #3a3a3a;
+    padding: 15px;
+    border-radius: var(--radius);
+    width: 100%;
+    color: #fff;
+    margin-bottom: 15px;
+}
+
+/* ===========================
+   Footer
+=========================== */
+.rodape {
+    background-color: var(--card-bg);
+    text-align: center;
+    padding: 20px;
+    margin-top: 40px;
+    font-size: 14px;
+    color: var(--muted);
+}
+
+.rodape a {
+    color: var(--accent);
+    text-decoration: none;
+}
+
+.rodape a:hover {
+    text-decoration: underline;
+}
+
+/* ===========================
+   Responsive
+=========================== */
+@media (max-width: 600px) {
+    .formulario-coleta,
+    .form-container,
+    .button-box,
+    .notificacao-container {
+        width: 100%;
+    }
+
+    .icons {
+        gap: 20px;
+    }
+
+    .lixeira img {
+        width: 120px;
+    }
+}
