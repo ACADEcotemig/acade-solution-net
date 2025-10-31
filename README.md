@@ -78,7 +78,7 @@ prototipo-do-site-main
 - [X] Opção de agendamento de coletas especiais  
 - [X] Educação Ambiental e Dicas  
 - [X] Solicitação de Coleta Especial Urgente  
-- [ ] Sistema de perfis
+- [X] Sistema de perfis
 
 # Projeto
 - [x] Protótipo visual do site com aimações usando o figma
