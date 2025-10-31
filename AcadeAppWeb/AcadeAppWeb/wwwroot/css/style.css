@@ -191,18 +191,6 @@ textarea {
     transition: border var(--transition), background-color var(--transition);
 }
 
-.profile-page input[type="password"] {
-    all: unset; /* optional: resets inherited styles */
-    display: block;
-    width: 100%;
-    padding: 0.5rem 0.75rem;
-    border: 1px solid #dee2e6;
-    border-radius: 0.5rem;
-    font-size: 1rem;
-    color: #212529;
-    background-color: #fff;
-    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-}
 
 input:focus,
 textarea:focus {
