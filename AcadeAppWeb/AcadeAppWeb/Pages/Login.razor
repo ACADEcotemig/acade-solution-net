@@ -5,23 +5,51 @@
 
   <div class="form-container">
     <label for="email">E-mail</label>
-    <input type="text" id="email" />
+    <input type="text" id="email" @bind="Email" />
 
     <label for="senha">Senha</label>
-    <input type="password" id="senha" />
+    <input type="password" id="senha" @bind="Senha" />
+
+        @if (!string.IsNullOrEmpty(Error))
+        {
+            <div class="alert alert-danger">@Error</div>
+        }
   </div>
 
   <div class="button-box">
+    <button class="botao-link" @onclick="Submit">Entrar</button>
     <a href="/cadastro" class="botao-link">Cadastrar</a>
 
-        <a href="/forgot-password" class="mt-2 d-block" style="color: white;">Esqueci minha senha</a>
+    <a href="/forgot-password" class="mt-2 d-block" style="color: white;">Esqueci minha senha</a>
+
   </div>
 
   <div class="google-login">
     <img src="Imagens/google2.png" alt="Fazer login com o Google" />
   </div>
+
+
 </section>
 
 @code {
-    [Inject] NavigationManager Nav { get; set; } = default!;
+  [Inject] NavigationManager Nav { get; set; } = default!;
+  [Inject] AcadeAppWeb.Services.AuthService Auth { get; set; } = default!;
+
+  private string Email { get; set; } = string.Empty;
+  private string Senha { get; set; } = string.Empty;
+  private string? Error;
+
+  private async Task Submit()
+  {
+    Error = null;
+    var user = await Auth.AuthenticateAsync(Email, Senha);
+    if (user != null)
+    {
+      Nav.NavigateTo("/");
+    }
+    else
+    {
+      Error = "Credenciais inválidas.";
+    }
+  }
 }

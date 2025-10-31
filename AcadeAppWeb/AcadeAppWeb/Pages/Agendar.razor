@@ -1,6 +1,8 @@
 ﻿@page "/agendar"
 @using AcadeAppWeb.Models
+@using AcadeAppWeb.Services
 @inject HttpClient Http
+@inject AuthService Auth
 
 <section class="coleta-container">
     <div class="mapa">
@@ -69,35 +71,40 @@
     {
         try
         {
-            var usuarios = await Http.GetFromJsonAsync<List<Usuario>>("http://localhost:5206/api/usuarios");
-
-            if (usuarios != null)
+            // Authenticate via the API instead of comparing plaintext locally
+            var authUser = await Auth.AuthenticateAsync(Email, Senha);
+            if (authUser == null)
             {
-                var usuario = usuarios.FirstOrDefault(u => u.Email == Email && u.Senha == Senha);
+                Mensagem = "❌ Usuário ou senha incorretos.";
+                MensagemCor = "red";
+                return;
+            }
 
-                if (usuario != null)
-                {
-                    usuario.Localizacao = Localizacao;
-                    await Http.PutAsJsonAsync($"http://localhost:5206/api/usuarios/{usuario.Id}", usuario);
+            // fetch full user by id and update location
+            var fullUser = await Http.GetFromJsonAsync<Usuario>($"http://localhost:5206/api/usuarios/{authUser.Id}");
+            if (fullUser == null)
+            {
+                Mensagem = "❌ Usuário não encontrado.";
+                MensagemCor = "red";
+                return;
+            }
 
-                    Mensagem = "✅ Localização registrada com sucesso!";
-                    MensagemCor = "green";
-                }
-                else
-                {
-                    Mensagem = "❌ Usuário ou senha incorretos.";
-                    MensagemCor = "red";
-                }
+            fullUser.Localizacao = Localizacao;
+            var resp = await Http.PutAsJsonAsync($"http://localhost:5206/api/usuarios/{fullUser.Id}", fullUser);
+            if (resp.IsSuccessStatusCode)
+            {
+                Mensagem = "✅ Localização registrada com sucesso!";
+                MensagemCor = "green";
             }
             else
             {
-                Mensagem = "❌ Não foi possível carregar usuários.";
+                Mensagem = "❌ Falha ao atualizar localização.";
                 MensagemCor = "red";
             }
         }
-        catch
+        catch (Exception ex)
         {
-            Mensagem = "❌ Erro ao comunicar com o servidor.";
+            Mensagem = "❌ Erro ao comunicar com o servidor." + " " + ex.Message;
             MensagemCor = "red";
         }
     }

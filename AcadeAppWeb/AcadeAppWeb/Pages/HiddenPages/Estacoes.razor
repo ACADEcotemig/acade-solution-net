@@ -58,6 +58,7 @@ else
     private EstacaoDeColeta estacaoForm = new();
     private EstacaoDeColeta? editingEstacao;
     private string Message = string.Empty;
+    private const string ApiBase = "https://localhost:5206";
 
     protected override async Task OnInitializedAsync()
     {
@@ -68,7 +69,7 @@ else
     {
         try
         {
-            var result = await Http.GetFromJsonAsync<List<EstacaoDeColeta>>("http://localhost:5206/api/estacoesdecoleta");
+            var result = await Http.GetFromJsonAsync<List<EstacaoDeColeta>>(ApiBase + "/api/estacoesdecoleta");
             estacoes = result ?? new List<EstacaoDeColeta>();
         }
         catch (Exception ex)
@@ -102,11 +103,11 @@ else
         {
             if (editingEstacao == null)
             {
-                await Http.PostAsJsonAsync("http://localhost:5206/api/estacoesdecoleta", estacaoForm);
+                await Http.PostAsJsonAsync(ApiBase + "/api/estacoesdecoleta", estacaoForm);
             }
             else
             {
-                await Http.PutAsJsonAsync($"http://localhost:5206/api/estacoesdecoleta/{estacaoForm.Id}", estacaoForm);
+                await Http.PutAsJsonAsync($"{ApiBase}/api/estacoesdecoleta/{estacaoForm.Id}", estacaoForm);
                 editingEstacao = null;
             }
 
@@ -124,7 +125,7 @@ else
     {
         try
         {
-            await Http.DeleteAsync($"http://localhost:5206/api/estacoesdecoleta/{id}");
+            await Http.DeleteAsync($"{ApiBase}/api/estacoesdecoleta/{id}");
             await LoadEstacoes();
             Message = string.Empty;
         }

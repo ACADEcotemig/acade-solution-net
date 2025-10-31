@@ -40,14 +40,12 @@
     [Inject] NavigationManager Nav { get; set; } = default!;
 
 }
-<img src="images/pontos.png"
-     style="cursor:pointer; width:200px;"
-     @onclick="AbrirMaps" />
+
 
 @code {
     private void AbrirMaps()
     {
-        string url = "https://www.google.com/maps/search/pontos+de+coleta/";
+        string url = "https://www.google.com/maps/search/pontos+de+coleta+lixo";
         NavManager.NavigateTo(url, forceLoad: true);
     }
 

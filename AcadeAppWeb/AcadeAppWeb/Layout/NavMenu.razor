@@ -1,12 +1,27 @@
-﻿<nav class="navbar">
+﻿@using Microsoft.AspNetCore.Components.Authorization
+
+<nav class="navbar">
+    <button class="botao-link" @onclick="OnToggleThemeClick">
+        @(IsLight ? "☀️" : "🌙")
+    </button>
     <NavLink href="/" Match="NavLinkMatch.All">Início</NavLink>
     <NavLink href="/agendar">Agendar</NavLink>
     <NavLink href="/login">Login</NavLink>
     <NavLink href="/cadastro">Cadastro</NavLink>
     <NavLink href="/educacao">Dicas</NavLink>
-    <button class="botao-link" @onclick="OnToggleThemeClick">
-        @(IsLight ? "☀️" : "🌙")
-    </button>
+    <NavLink href="/profile" class="ml-auto">Perfil</NavLink>
+
+
+    <div class="user-email" style="padding-left:30px">
+        <AuthorizeView>
+            <Authorized>
+                <span>@context.User.FindFirst("email")?.Value</span>
+            </Authorized>
+            <NotAuthorized>
+                <span></span>
+            </NotAuthorized>
+        </AuthorizeView>
+    </div>
 
 </nav>
 
